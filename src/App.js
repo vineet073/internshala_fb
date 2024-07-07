@@ -8,9 +8,9 @@ console.log("config_id: ", config_id);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [[profilePicture, setProfilePicture]]=useState(null);
+  // const [[profilePicture, setProfilePicture]]=useState(null);
   const [accessToken,setAccessToken]=useState(null);
-  const [pages,setPages]=useState([]);
+  // const [pages,setPages]=useState([]);
   const [userID,setUserID]=useState(null);
   
   useEffect(() => {
@@ -52,10 +52,10 @@ function App() {
   }
 
   const fetchUserData = async (accessToken) => {
-    const graphAPIUrl = `https://graph.facebook.com/me?fields=id,name,picture&access_token=${accessToken}`;
-    const response = await fetch(graphAPIUrl);
-    const data = await response.json();
-    setUserData(data);
+    window.FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      setUserData(response);
+    });
   }
 
   const fetchProfilePicture = async () => {
