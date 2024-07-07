@@ -33,20 +33,21 @@ function App() {
     };    
   }, []);
   
+  window.FB.getLoginStatus((response) => {
+    console.log("login status :", response);
+    if (response.status === 'connected') {
+      setIsLoggedIn(true);
+      fetchUserData(accessToken)
+      fetchProfilePicture();
+    }
+  });
 
   const handleLogin = () => {  
     window.FB.login((response) => {
+      console.log("response :", response)
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
         setUserID(response.authResponse.userID);
-      }
-    });
-
-    window.FB.getLoginStatus((response) => {
-      if (response.status === 'connected') {
-        setIsLoggedIn(true);
-        fetchUserData(accessToken)
-        fetchProfilePicture();
       }
     });
   }
@@ -57,12 +58,12 @@ function App() {
     });
   }
 
+  console.log("user id before :", userID);
+
   const fetchProfilePicture = async () => {
     console.log("userid :", userID)
     window.FB.api(
-      `/${userID}/picture`,
-      'GET',
-      {},
+      `/${userID}/`,
       function(response) {
         console.log(response);
       }
