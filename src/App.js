@@ -36,7 +36,10 @@ function App() {
 
   const handleLogin = () => {  
     window.FB.login((response) => {
-      console.log(response)
+      console.log("login response: ",response)
+      console.log("userID before:", response?.userID);
+      console.log("status: ",response?.status);
+      console.log("userID after", response.authResponse.userID);
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
         setUserID(response.authResponse.userID);
@@ -60,7 +63,6 @@ function App() {
   }
 
   const fetchProfilePicture = async () => {
-    console.log("userID",userID);
     window.FB.api(
       `/${userID}/picture`,
       'GET',
