@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const appId = process.env.REACT_APP_FB_ID; 
+console.log("appId: ", appId);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
