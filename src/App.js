@@ -56,11 +56,11 @@ function App() {
   }
 
   const fetchUserData = () => {
-    window.FB.api('/me?fields=name,email,picture', function(response) {
+    window.FB.api(`/me?access_token=${accessToken}&fields=name,email,picture`, function(response) {
       setUserData(response);
+      console.log("profile data :", userData)
       if (response.picture && response.picture.data && response.picture.data.url) {
         setProfilePic(response.picture.data.url);
-        console.log("profile data :", userData)
       }
     });
   }
@@ -68,7 +68,7 @@ function App() {
   console.log("user id before :", userID);
 
   const fetchUserPosts = () => {
-    window.FB.api('/me/posts?fields=message,likes.summary(true),comments.summary(true),shares', function(response) {
+    window.FB.api('/me/posts', function(response) {
       if (response && response.data) {
         setUserPosts(response.data);
         console.log("user posts :", userPosts)
@@ -85,7 +85,7 @@ function App() {
       {isLoggedIn && (
         <div>
           <h1>Welcome, {userData?.name}</h1>
-          
+          <img src={profilePic} alt='Profile'/>
         </div>
       )}
     </div>
