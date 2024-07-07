@@ -8,11 +8,11 @@ console.log("config_id: ", config_id);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  // const [[profilePicture, setProfilePicture]]=useState(null);
   const [accessToken,setAccessToken]=useState(null);
-  // const [pages,setPages]=useState([]);
   const [userID,setUserID]=useState(null);
-  
+  const [profilePic, setProfilePic] = useState('');
+  const [userPosts, setUserPosts] = useState([]);
+
   useEffect(() => {
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -29,18 +29,19 @@ function App() {
         xfbml: true,
         version: 'v20.0'
       }); 
-      window.FB.AppEvents.logPageView();      
+
+      window.FB.AppEvents.logPageView(); 
+      
+      window.FB.getLoginStatus((response) => {
+        console.log("login status :", response);
+        if (response.status === 'connected') {
+          setIsLoggedIn(true);
+        }
+      });
     };    
   }, []);
   
-  window.FB.getLoginStatus((response) => {
-    console.log("login status :", response);
-    if (response.status === 'connected') {
-      setIsLoggedIn(true);
-      fetchUserData(accessToken)
-      fetchProfilePicture();
-    }
-  });
+
 
   const handleLogin = () => {  
     window.FB.login((response) => {
@@ -48,26 +49,31 @@ function App() {
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
         setUserID(response.authResponse.userID);
+        fetchUserData();
+        fetchUserPosts();
       }
     });
   }
 
-  const fetchUserData = async (accessToken) => {
-    window.FB.api('/me', function(response) {
+  const fetchUserData = () => {
+    window.FB.api('/me?fields=name,email,picture', function(response) {
       setUserData(response);
+      if (response.picture && response.picture.data && response.picture.data.url) {
+        setProfilePic(response.picture.data.url);
+        console.log("profile data :", userData)
+      }
     });
   }
 
   console.log("user id before :", userID);
 
-  const fetchProfilePicture = async () => {
-    console.log("userid :", userID)
-    window.FB.api(
-      `/${userID}/`,
-      function(response) {
-        console.log(response);
+  const fetchUserPosts = () => {
+    window.FB.api('/me/posts?fields=message,likes.summary(true),comments.summary(true),shares', function(response) {
+      if (response && response.data) {
+        setUserPosts(response.data);
+        console.log("user posts :", userPosts)
       }
-    );
+    });
 
   };
 
