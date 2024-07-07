@@ -36,14 +36,9 @@ function App() {
       return;
     }
     
-    window.FB.login(
-      function(response) {
-        console.log(response);
-      },
-      {
-        config_id: config_id
-      }
-    );
+    window.FB.login({config_id},(response) => {
+      console.log("login response: ",response)
+    });
 
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
