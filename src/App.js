@@ -37,7 +37,7 @@ function App() {
       if (response.status === 'connected') {
         setIsLoggedIn(true);
         fetchUserData(accessToken)
-        fetchProfilePicture
+        fetchProfilePicture();
       }
     });
   }, []); 
@@ -46,6 +46,7 @@ function App() {
     window.FB.login((response) => {
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
+        setUserID(response.authResponse.userID);
       }
     });
   }
@@ -57,7 +58,8 @@ function App() {
     setUserData(data);
   }
 
-  const fetchProfilePicture = async (accessToken) => {
+  const fetchProfilePicture = async () => {
+    console.log("userID",userID);
     window.FB.api(
       `/${userID}/picture`,
       'GET',
