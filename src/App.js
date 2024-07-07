@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const appId = process.env.REACT_APP_FB_ID; 
-console.log(appId);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -9,7 +8,7 @@ function App() {
   useEffect(() => {
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
+      if (d.getElementById(id)) {return;}
       js = d.createElement(s); js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
@@ -21,14 +20,18 @@ function App() {
         cookie: true,
         xfbml: true,
         version: 'v20.0'
-      });      
+      }); 
+      window.FB.AppEvents.logPageView();      
     };
   }, []); 
 
   const handleLogin = () => {
     window.FB.login((response)=>{
       console.log("response: ", response);
-    })
+    },
+  {
+    config_id:process.env.REACT_APP_CONFIG_ID
+  })
 
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
