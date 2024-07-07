@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 const appId = process.env.REACT_APP_FB_ID; 
+const config_id = process.env.REACT_APP_CONFIG_ID;
 console.log("appId: ", appId);
+console.log("config_id: ", config_id);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -33,13 +35,15 @@ function App() {
       console.error("FB SDK not initialized yet.");
       return;
     }
+    
     window.FB.login(
-    function (response){
-      console.log("response: ", response);
-    },
-    {
-      config_id: process.env.REACT_APP_CONFIG_ID
-    })
+      function(response) {
+        console.log(response);
+      },
+      {
+        config_id: config_id
+      }
+    );
 
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
