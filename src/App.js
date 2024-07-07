@@ -7,7 +7,6 @@ console.log("config_id: ", config_id);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [fbSDKLoaded, setFbSDKLoaded] = useState(false); 
   
   useEffect(() => {
     (function(d, s, id){
@@ -27,15 +26,10 @@ function App() {
       }); 
       window.FB.AppEvents.logPageView();      
     };
-    setFbSDKLoaded(true);
+
   }, []); 
 
-  const handleLogin = () => {
-    if (!fbSDKLoaded) {
-      console.error("FB SDK not initialized yet.");
-      return;
-    }
-    
+  const handleLogin = () => {   
     window.FB.login((response) => {
       console.log("login response: ",response)
     });
@@ -55,7 +49,7 @@ function App() {
   return (
     <div className="App">
       {!isLoggedIn && (
-        <button onClick={handleLogin}>Login with Facebook</button>
+        <button onClick={()=>handleLogin()}>Login with Facebook</button>
       )}
       {isLoggedIn && (
         <div>
