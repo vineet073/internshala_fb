@@ -5,7 +5,8 @@ console.log("appId: ", appId);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-
+  const [fbSDKLoaded, setFbSDKLoaded] = useState(false); 
+  
   useEffect(() => {
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -24,9 +25,14 @@ function App() {
       }); 
       window.FB.AppEvents.logPageView();      
     };
+    setFbSDKLoaded(true);
   }, []); 
 
   const handleLogin = () => {
+    if (!fbSDKLoaded) {
+      console.error("FB SDK not initialized yet.");
+      return;
+    }
     window.FB.login(
     function (response){
       console.log("response: ", response);
