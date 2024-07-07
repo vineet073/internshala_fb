@@ -4,9 +4,14 @@ const appId = process.env.REACT_APP_FB_ID;
 const config_id = process.env.REACT_APP_CONFIG_ID;
 console.log("appId: ", appId);
 console.log("config_id: ", config_id);
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [[profilePicture, setProfilePicture]]=useState(null);
+  const [accessToken,setAccessToken]=useState(null);
+  const [pages,setPages]=useState([]);
+  const [userID,setUserID]=useState(null);
   
   useEffect(() => {
     (function(d, s, id){
@@ -27,24 +32,42 @@ function App() {
       window.FB.AppEvents.logPageView();      
     };
 
-  }, []); 
-
-  const handleLogin = () => {   
-    window.FB.login((response) => {
-      console.log("login response: ",response)
-    });
-
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
       if (response.status === 'connected') {
         setIsLoggedIn(true);
-        window.FB.api('/me', (response) => {
-          setUserData(response);
-        });
+        fetchUserData(accessToken)
+        fetchProfilePicture
+      }
+    });
+  }, []); 
+
+  const handleLogin = () => {   
+    window.FB.login((response) => {
+      if(response.status==='connected'){
+        setAccessToken(response.authResponse.accessToken);
       }
     });
   }
 
+  const fetchUserData = async (accessToken) => {
+    const graphAPIUrl = `https://graph.facebook.com/me?fields=id,name,picture&access_token=${accessToken}`;
+    const response = await fetch(graphAPIUrl);
+    const data = await response.json();
+    setUserData(data);
+  }
+
+  const fetchProfilePicture = async (accessToken) => {
+    window.FB.api(
+      `/${userID}/picture`,
+      'GET',
+      {},
+      function(response) {
+        console.log(response);
+      }
+    );
+
+  };
 
   return (
     <div className="App">
@@ -54,7 +77,7 @@ function App() {
       {isLoggedIn && (
         <div>
           <h1>Welcome, {userData?.name}</h1>
-          <p>Email: {userData?.email}</p>
+          
         </div>
       )}
     </div>
