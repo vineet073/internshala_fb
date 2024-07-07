@@ -35,19 +35,19 @@ function App() {
   
 
   const handleLogin = () => {  
-    window.FB.getLoginStatus((response) => {
-      if (response.status === 'connected') {
-        setIsLoggedIn(true);
-        fetchUserData(accessToken)
-        fetchProfilePicture();
-      }
-    });
-
     window.FB.login((response) => {
       console.log(response)
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
         setUserID(response.authResponse.userID);
+      }
+    });
+
+    window.FB.getLoginStatus((response) => {
+      if (response.status === 'connected') {
+        setIsLoggedIn(true);
+        fetchUserData(accessToken)
+        fetchProfilePicture();
       }
     });
   }
