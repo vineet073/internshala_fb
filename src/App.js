@@ -35,7 +35,8 @@ function App() {
     
   }, []);
   
-  useEffect(()=>{
+
+  const handleLogin = () => {  
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
       if (response.status === 'connected') {
@@ -44,9 +45,7 @@ function App() {
         fetchProfilePicture();
       }
     });
-  })
-
-  const handleLogin = () => {   
+     
     window.FB.login((response) => {
       if(response.status==='connected'){
         setAccessToken(response.authResponse.accessToken);
