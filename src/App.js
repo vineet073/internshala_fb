@@ -32,6 +32,10 @@ function App() {
       window.FB.AppEvents.logPageView();      
     };
 
+    
+  }, []);
+  
+  useEffect(()=>{
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
       if (response.status === 'connected') {
@@ -40,7 +44,7 @@ function App() {
         fetchProfilePicture();
       }
     });
-  }, []); 
+  })
 
   const handleLogin = () => {   
     window.FB.login((response) => {
