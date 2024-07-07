@@ -27,12 +27,13 @@ function App() {
   }, []); 
 
   const handleLogin = () => {
-    window.FB.login((response)=>{
+    window.FB.login(
+    function (response){
       console.log("response: ", response);
     },
-  {
-    config_id:process.env.REACT_APP_CONFIG_ID
-  })
+    {
+      config_id: process.env.REACT_APP_CONFIG_ID
+    })
 
     window.FB.getLoginStatus((response) => {
       console.log("login status: ", response)
