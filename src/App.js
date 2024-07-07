@@ -8,57 +8,44 @@ function App() {
 
   useEffect(() => {
     (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) { return; }
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-
-    window.fbAsyncInit = function() {
+     window.fbAsyncInit = function() {
       window.FB.init({
         appId,
         cookie: true,
         xfbml: true,
         version: 'v20.0'
-      });
-
-
-      window.FB.getLoginStatus(function(response) {
-        statusChangeCallback(response);
-      });
+      });      
     };
   }, []); 
 
-  const statusChangeCallback = (response) => {
-    if (response.status === 'connected') {
-      setIsLoggedIn(true);
-      fetchUserData();
-    } else {
-      setIsLoggedIn(false);
-      setUserData(null);
-    }
-  };
-
-  const fetchUserData = () => {
-    window.FB.api('/me', {fields: 'name,email'}, function(response) {
-      setUserData(response);
-    });
-  };
-
   const handleLogin = () => {
-    window.FB.login(function(response) {
-      statusChangeCallback(response);
-    }, {scope: 'public_profile,email'});
-  };
+    window.FB.login((response)=>{
+      console.log("response: ", response);
+    })
+
+    window.FB.getLoginStatus((response) => {
+      console.log("login status: ", response)
+      if (response.status === 'connected') {
+        setIsLoggedIn(true);
+        window.FB.api('/me', (response) => {
+          setUserData(response);
+        });
+      }
+    });
+  }
+
 
   return (
     <div className="App">
       {!isLoggedIn && (
-        <button onClick={handleLogin}>
-          Login with Facebook
-        </button>
+        <button onClick={handleLogin}>Login with Facebook</button>
       )}
       {isLoggedIn && (
         <div>
