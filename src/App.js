@@ -36,6 +36,10 @@ function App() {
         console.log("login status :", response);
         if (response.status === 'connected') {
           setIsLoggedIn(true);
+          setAccessToken(response?.authResponse?.accessToken)
+          setUserID(response?.authResponse?.userID)
+          fetchUserData();
+          fetchUserPosts();
         }
       });
     };    
