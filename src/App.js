@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 const appId = process.env.REACT_APP_FB_ID; 
@@ -59,7 +60,7 @@ function App() {
   }
 
   const fetchUserData = async(access_token) => {
-    const response=await fetch(`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,email,picture`)
+    const response=await axios.get(`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,email,picture`)
     console.log("user data response :",response)
     if(!response){
       setUserData(response);
