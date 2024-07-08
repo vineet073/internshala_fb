@@ -37,9 +37,7 @@ function App() {
           setIsLoggedIn(true);
           setAccessToken(response?.authResponse?.accessToken)
           setUserID(response?.authResponse?.userID)
-          console.log("access token b: ",response?.authResponse?.accessToken)
-          console.log("user id b:", response?.authResponse?.userID)
-          fetchUserData();
+          fetchUserData(response?.authResponse?.accessToken);
           fetchUserPosts();
         }
       });
@@ -60,10 +58,8 @@ function App() {
     });
   }
 
-  const fetchUserData = async() => {
-    console.log("access token a: ",accessToken)
-    console.log("user id a:", userID)
-    const response=await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`)
+  const fetchUserData = async(access_token) => {
+    const response=await fetch(`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,email,picture`)
     console.log("user data response :",response)
     if(!response){
       setUserData(response);
