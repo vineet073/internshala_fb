@@ -61,7 +61,7 @@ function App() {
 
   const fetchUserData = async(access_token) => {
     const response=await axios.get(`https://graph.facebook.com/me?access_token=${access_token}&fields=id,name,email,picture`)
-    console.log("user data response :",response)
+    console.log("user data response :",response.data)
     if(!response){
       setUserData(response);
     }
