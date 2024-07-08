@@ -10,7 +10,6 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [accessToken,setAccessToken]=useState(null);
   const [userID,setUserID]=useState(null);
-  const [profilePic, setProfilePic] = useState('');
   const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
@@ -59,14 +58,12 @@ function App() {
     });
   }
 
-  const fetchUserData = () => {
-    window.FB.api(`/me?access_token=${accessToken}&fields=name,email,picture`, function(response) {
+  const fetchUserData = async() => {
+    const response=await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`)
+    console.log("user data response :",response)
+    if(!response){
       setUserData(response);
-      console.log("profile data :", userData)
-      if (response.picture && response.picture.data && response.picture.data.url) {
-        setProfilePic(response.picture.data.url);
-      }
-    });
+    }
   }
 
   console.log("user id before :", userID);
@@ -89,7 +86,7 @@ function App() {
       {isLoggedIn && (
         <div>
           <h1>Welcome, {userData?.name}</h1>
-          <img src={profilePic} alt='Profile'/>
+          <img src={userData?.picture?.data?.url} alt='Profile'/>
         </div>
       )}
     </div>
