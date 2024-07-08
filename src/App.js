@@ -37,6 +37,8 @@ function App() {
           setIsLoggedIn(true);
           setAccessToken(response?.authResponse?.accessToken)
           setUserID(response?.authResponse?.userID)
+          console.log("access token b: ",accessToken)
+          console.log("user id b:", userID)
           fetchUserData();
           fetchUserPosts();
         }
@@ -59,14 +61,14 @@ function App() {
   }
 
   const fetchUserData = async() => {
+    console.log("access token a: ",accessToken)
+    console.log("user id a:", userID)
     const response=await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`)
     console.log("user data response :",response)
     if(!response){
       setUserData(response);
     }
   }
-
-  console.log("user id before :", userID);
 
   const fetchUserPosts = () => {
     window.FB.api('/me/posts', function(response) {
