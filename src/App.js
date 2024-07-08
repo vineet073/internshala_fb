@@ -37,8 +37,8 @@ function App() {
           setIsLoggedIn(true);
           setAccessToken(response?.authResponse?.accessToken)
           setUserID(response?.authResponse?.userID)
-          console.log("access token b: ",accessToken)
-          console.log("user id b:", userID)
+          console.log("access token b: ",response?.authResponse?.accessToken)
+          console.log("user id b:", response?.authResponse?.userID)
           fetchUserData();
           fetchUserPosts();
         }
